@@ -4,7 +4,17 @@ import Layout from "app/core/layouts/Layout"
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 import logout from "app/auth/mutations/logout"
 import logo from "public/logo.png"
-import { Button, Code, Page, Text, Textarea } from "@geist-ui/core"
+import {
+  Button,
+  ButtonGroup,
+  Code,
+  Page,
+  Text,
+  Textarea,
+  useClipboard,
+  useToasts,
+} from "@geist-ui/core"
+import { Copy } from "@geist-ui/icons"
 
 /*
  * This file is just for a pleasant getting started page for your new app.
@@ -54,6 +64,8 @@ const UserInfo = () => {
 const Home: BlitzPage = () => {
   const [envText, setenvText] = useState<string | null>(null)
   const [envMap, setEnvMap] = useState(null)
+  const { copy } = useClipboard()
+  const { setToast } = useToasts()
 
   const testEnvRegex = (regex: string) => {
     const envExpression = new RegExp(/(^[A-Z0-9_]+)(\=)(.*\n(?=[A-Z])|.*$)/gm)
@@ -62,13 +74,16 @@ const Home: BlitzPage = () => {
     return result
   }
 
+  const copyHandler = (copyText: string) => {
+    copy(copyText)
+    setToast({ text: "Copied environment variables as json" })
+  }
+
   const varsToJson = (vars: string) => {
     const map = new Map()
     for (let line of vars.split("\n")) {
       const [variable, value] = line.split("=")
       const noCharsValue = value!.replace(/["']/g, "")
-      console.log("🚀 ~ file: index.tsx ~ line 69 ~ varsToJson ~ variable, value", variable, value)
-      //@ts-ignore
       map.set(variable, noCharsValue)
     }
     setEnvMap(Object.fromEntries(map))
@@ -80,16 +95,26 @@ const Home: BlitzPage = () => {
       <div className="flex flex-col space-y-5">
         <Text h3>Enter ENV Vars to convert to JSON</Text>
         <Textarea onChange={(e) => setenvText(e.target.value)} width="100%" height="200px" />
-        <Button
-          onClick={() => varsToJson(envText!)}
-          disabled={!testEnvRegex(envText!)}
-          type="success-light"
-          className="self-start"
-        >
-          Save
-        </Button>
+
+        <ButtonGroup type="success-light" className="self-start">
+          <Button
+            onClick={() => varsToJson(envText!)}
+            disabled={!testEnvRegex(envText!)}
+            className="self-start"
+          >
+            Save
+          </Button>
+          {envMap && (
+            <Button
+              onClick={() => copyHandler(JSON.stringify(envMap, null, 2))}
+              iconRight={<Copy />}
+              auto
+            />
+          )}
+        </ButtonGroup>
+
         {envMap && (
-          <Code height="200px" block my={0}>
+          <Code block my={0}>
             {JSON.stringify(envMap, null, 2)}
           </Code>
         )}

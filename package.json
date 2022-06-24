@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@geist-ui/core": "2.3.8",
+    "@geist-ui/icons": "1.0.2",
     "@hookform/resolvers": "2.9.2",
     "@prisma/client": "3.15.2",
     "autoprefixer": "10.x",
