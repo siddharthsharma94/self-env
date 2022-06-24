@@ -12,3 +12,4 @@ Self Env allows you to
 - Keep your environments in sync 🔄
 - Connects with your vercel projects and bulk updates your deployments 📤
 - a lot more soon ❇️
+![CleanShot 2022-06-24 at 03 18 45@2x](https://user-images.githubusercontent.com/11656847/175515554-d72eaae3-2e63-43f6-852e-35b78de36335.png)
