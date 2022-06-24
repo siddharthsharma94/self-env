@@ -1,5 +1,6 @@
 # Self Env
 
+**Note:** 🏗️ This repo is currently a Work in Progress 🏗️.
 
 ### Welcome to Self Env
 
